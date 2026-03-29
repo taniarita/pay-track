@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  EMPLOYEE
+  MANAGER
+}
+
+enum ExpenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ExpenseCategory {
+  MEALS
+  TRANSPORT
+  ACCOMMODATION
+  OTHER
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(EMPLOYEE)
+  createdAt    DateTime  @default(now())
+  expenses     Expense[]
+}
+
+model Expense {
+  id              String          @id @default(cuid())
+  title           String
+  amount          Float
+  category        ExpenseCategory
+  date            DateTime
+  description     String?
+  status          ExpenseStatus   @default(PENDING)
+  rejectionReason String?
+  submittedById   String
+  submittedBy     User            @relation(fields: [submittedById], references: [id])
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
