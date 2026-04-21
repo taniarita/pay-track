@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# pay-track
 
-## Getting Started
+Expense management app for companies. Employees submit expenses; managers approve or reject them with a reason.
 
-First, run the development server:
+Built with Next.js 16 (App Router), Prisma 7, Neon (PostgreSQL), NextAuth v5, and Tailwind CSS.
+
+---
+
+## Prerequisites
+
+- Node.js 18+
+- A free [Neon](https://neon.tech) account (no local PostgreSQL needed)
+
+---
+
+## Setup
+
+### 1. Clone and install
+
+```bash
+git clone <repo-url>
+cd pay-track
+npm install
+```
+
+### 2. Configure environment variables
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and fill in the three values:
+
+```env
+DATABASE_URL="postgresql://..."   # connection string from Neon
+AUTH_SECRET="..."                  # any random string (e.g. run: openssl rand -base64 32)
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+**Getting the Neon connection string:**
+1. Create a project at [neon.tech](https://neon.tech)
+2. Go to your project → **Connection Details**
+3. Copy the **connection string** (starts with `postgresql://`)
+
+### 3. Run migrations and seed
+
+```bash
+npx prisma migrate deploy
+npm run db:seed
+```
+
+The seed creates 6 demo users (password for all: `demo1234`):
+
+| Email | Role |
+|---|---|
+| manager1@example.com | Manager |
+| manager2@example.com | Manager |
+| employee1@example.com | Employee |
+| employee2@example.com | Employee |
+| employee3@example.com | Employee |
+| employee4@example.com | Employee |
+
+### 4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) and log in with any seed account.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Testing
 
-## Learn More
+```bash
+npm test           # unit and integration tests (Vitest)
+npm run test:e2e   # end-to-end tests (Playwright, requires dev server running)
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  api/expenses/          # REST API routes
+  employee/              # employee pages (submit, history)
+  manager/               # manager pages (review queue)
+  login/                 # login page
+lib/                     # business logic (validation, auth)
+prisma/                  # schema, migrations, seed
+components/              # shared UI components
+__tests__/               # unit and integration tests
+e2e/                     # Playwright end-to-end tests
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Database | PostgreSQL via [Neon](https://neon.tech) |
+| ORM | Prisma 7 |
+| Auth | NextAuth v5 (Credentials + JWT) |
+| UI | Tailwind CSS + shadcn/ui |
+| Unit/integration tests | Vitest |
+| E2E tests | Playwright |
