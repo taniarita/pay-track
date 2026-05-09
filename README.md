@@ -6,6 +6,24 @@ Built with Next.js 16 (App Router), Prisma 7, Neon (PostgreSQL), NextAuth v5, an
 
 ---
 
+## Screenshots
+
+| Login | Employee — expense history |
+|---|---|
+| ![Login](docs/screenshots/login.png) | ![Employee history](docs/screenshots/employee-history.png) |
+
+| Employee — submit expense | Manager — review queue |
+|---|---|
+| ![Submit expense](docs/screenshots/employee-submit.png) | ![Manager queue](docs/screenshots/manager-queue.png) |
+
+**Approve flow**
+![Approve flow](docs/screenshots/manager-approve.gif)
+
+**Reject flow**
+![Reject flow](docs/screenshots/manager-reject.gif)
+
+---
+
 ## Prerequisites
 
 - Node.js 18+
