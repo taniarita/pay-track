@@ -30,6 +30,15 @@ export async function GET(_request: Request) {
   const session = await auth()
   if (!session) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
+  if (session.user.role === 'MANAGER') {
+    const expenses = await prisma.expense.findMany({
+      where: { status: 'PENDING' },
+      include: { submittedBy: { select: { id: true, email: true } } },
+      orderBy: { createdAt: 'desc' },
+    })
+    return Response.json(expenses)
+  }
+
   const expenses = await prisma.expense.findMany({
     where: { submittedById: session.user.id },
     orderBy: { createdAt: 'desc' },
