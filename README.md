@@ -47,18 +47,26 @@ npm install
 cp .env.example .env
 ```
 
-Open `.env` and fill in the three values:
+Open `.env` and fill in the values:
 
+**`DATABASE_URL`** — your Neon connection string:
+1. Create a free project at [neon.tech](https://neon.tech)
+2. Go to your project → **Connection Details**
+3. Copy the connection string and replace the placeholder in `.env` — it should look like:
 ```env
-DATABASE_URL="postgresql://..."   # connection string from Neon
-AUTH_SECRET="..."                  # any random string (e.g. run: openssl rand -base64 32)
-NEXTAUTH_URL="http://localhost:3000"
+DATABASE_URL="postgresql://user:password@host/dbname?sslmode=require"
 ```
 
-**Getting the Neon connection string:**
-1. Create a project at [neon.tech](https://neon.tech)
-2. Go to your project → **Connection Details**
-3. Copy the **connection string** (starts with `postgresql://`)
+**`AUTH_SECRET`** — a random secret used to sign sessions. Generate one by running:
+```bash
+openssl rand -base64 32
+```
+Copy the output and use it as the value.
+
+**`NEXTAUTH_URL`** — leave as-is for local development:
+```env
+NEXTAUTH_URL="http://localhost:3000"
+```
 
 ### 3. Run migrations and seed
 
@@ -66,6 +74,8 @@ NEXTAUTH_URL="http://localhost:3000"
 npx prisma migrate deploy
 npm run db:seed
 ```
+
+`prisma migrate deploy` creates the database tables; `db:seed` populates them with demo accounts. The seed is idempotent — safe to run more than once.
 
 The seed creates 6 demo users (password for all: `demo1234`):
 
